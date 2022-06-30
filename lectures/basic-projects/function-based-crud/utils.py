@@ -10,7 +10,7 @@ def generate_id(ids):
     """
     import random
     id_ = random.randint(100, 1000)
-    while id in ids: 
+    while id_ in ids: 
         id_ = random.randint(100, 1000)
     return str(id_) 
 
@@ -48,6 +48,6 @@ def write_to_db(name, data):
     Записывает эти данные в файл
     '''
     import json 
-    with open(name, 'w') as file: 
+    with open(name, 'w', encoding='utf8') as file: 
         # dump method writes our data 
-        json.dump(data, file)
+        json.dump(data, file, ensure_ascii=False)
