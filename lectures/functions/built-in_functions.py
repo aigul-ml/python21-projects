@@ -153,3 +153,71 @@ title = "First leTTeR of EACH Word"
 def capitalizeTitle(title):
     return " ".join([word.lower() if len(word) < 3 else word.title() for word in title.split()])
 print(capitalizeTitle("First leTTeR of EACH Word"))
+
+"""
+CONTENT FROM PLATFORM 
+"""
+
+from functools import reduce
+numbers = [5, 6, 7, 8, 9]
+multiply = reduce(lambda x, y: x * y, numbers)  # returns single output
+print(multiply)
+
+# zip()
+list_a = [1, 2, 3, 4, 5]
+list_b = ['a', 'b', 'c', 'd', 'e']
+
+zippled_list = list(zip(list_a, list_b))
+# returns tuple
+# [ (1, 'a'), (2, 'b'), (4, 'd')]
+print(zippled_list)
+
+
+# example extended 
+list_a = [1, 2, 3, 4, 5, 6, 7, 8]
+list_b = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
+list_c = ['makers', 'bootcamp', 'world', 'zip']
+
+zippled_list = list(zip(list_a, list_b, list_c))
+list_numbers, list_letters, list_str = list(zip(*zippled_list))
+print(list_numbers)
+print(list_letters)
+print(list_str)
+
+# enumerate()
+seasons = ['spring', 'winter', 'fall', 'summer']
+enumerated_seasons = list(enumerate(seasons, start = 5))
+# [(5, 'spring'), (6, 'winter'), (7, 'fall'), (8, 'summer')]
+print(enumerated_seasons)
+# [(0, 'spring'), (1, 'winter'), (2, 'fall'), (3, 'summer')] enumerates from 0 
+
+
+# abs 
+negative = -123
+absolute = abs(negative)
+print(absolute)
+# 123
+
+
+# all --> and 
+# any --> or 
+list_of_zeros = [0, 0, 0, 0]  # returns True if all the numbers are True 
+is_true = all(list_of_zeros)
+
+list_of_zeros = [0, 0, 1, 0]  # if one of the items in list is True --> returns True 
+is_true = any(list_of_zeros)
+print(is_true)
+# False 
+
+
+# ascii
+list_1 = ['makers', 'ребята', 23, 0, '$']
+list_2 = ascii(list_1)
+print(list_2)
+# ['makers', '\u0440\u0435\u0431\u044f\u0442\u0430', 23, 0, '$']
+
+
+# ord() - возвращает значение, под которым хранится буква или знак в Unicode
+# chr() - возвращает букву, ссылаясь на место в ячейке памяти, под которым хранится буква
+
+# divmod --> (x // y, x % y)
