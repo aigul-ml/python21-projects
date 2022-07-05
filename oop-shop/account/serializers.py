@@ -1,4 +1,3 @@
-import imp
 from abstract.serializers import BaseSerializer
 
 from .models import User    # из этой же папки импортируем

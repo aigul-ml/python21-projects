@@ -18,7 +18,7 @@ class BaseSerializer:
             dict_[field] = getattr(obj, field)   # adding to our dictionary 
         return dict_
     
-    def serialize_queryset(self, queryset): 
+    def serialize_queryset(self, queryset=None): 
         if queryset is None: 
             queryset = self.Meta.queryset
             

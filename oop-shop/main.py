@@ -1,12 +1,13 @@
-from pprint import pprint 
-from shop.models import Product
-from abstract.serializers import BaseSerializer
+from shop.models import Product, Category
+from shop.serializers import ProductSerializer
 
-obj1 = Product('IPhone', 234, '...', 3)
-obj2 = Product('lenovo', 34, '...', 2)
-obj3 = Product('samsung', 32, '...', 2)
+cat = Category("phones")
+obj1 = Product("iphone", 234, "...", 3, cat)
+obj2 = Product("lenovo", 32, "...", 5, cat)
+obj3 = Product("samsung", 76, "...", 10, cat)
 
-res = BaseSerializer().serialize_queryset([obj1, obj2, obj3])
+res = ProductSerializer().serialize_queryset([obj1, obj2, obj3])
+from pprint import pprint
 pprint(res)
 
 # user1 = User('test@gmail.com', 'hello', 'female')
