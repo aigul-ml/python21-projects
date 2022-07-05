@@ -1,37 +1,8 @@
-from audioop import add
-import permissions 
-
-
-class Category: 
-    def __init__(self, title) -> None:
-        self.title = title
-
-    def __str__(self) -> str:
-        return self.title
-
-class Product: 
-    def __init__(self, title, price, description, quantity) -> None:
-        self.title = title 
-        self.price = price
-        self.desc = description
-        self.quant = quantity
-
-    def __str__(self) -> str:
-        return f'{self.title} [{self.quant}] - {self.price}\n({self.desc[:20]})'
-
-class Comment: 
-    def __init__(self, user, product, body) -> None:
-        permissions.login_required(user)   # only logged in users can leave a comment 
-        from datetime import datetime
-        self.user = user 
-        self.product = product
-        self.body = body
-        self.created_at = datetime.now()
-
-    def __str__(self) -> str:
-        return f'{self.user.email} - [{self.created_at}] - {self.body}'
+import permissions
 
 class User: 
+    objects = [] # adding objects into list 
+
     def __init__(self, email, name, sex) -> None:
         self.email = email 
         self.name = name 
@@ -39,6 +10,8 @@ class User:
         self.__password = None
         self.is_authenticated = False
         print(f'Success - user is created {self.email}')
+        # to objects adding object to our empty list of objects on line 4 [objects = [] ]
+        User.objects.append(self)
 
     def registration(self, password, password_confirm): 
         if password != password_confirm: 
