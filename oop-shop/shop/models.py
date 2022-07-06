@@ -16,7 +16,7 @@ class Product:
     objects = []
     _id = 0
 
-    def __init__(self, title, price, description, quantity, category) -> None:
+    def __init__(self, title, price, description, quantity, category) -> None: # polimorfizm - init method
         self.id = Product._id   # записывает id продукта
         self.title = title 
         self.price = price

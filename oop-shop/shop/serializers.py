@@ -13,7 +13,7 @@ class ProductSerializer(BaseSerializer):
         fields = ['id', 'title', 'price', 'desc', 'quant', 'category']
         queryset = Product.objects
 
-    def serialize_obj(self, obj):
+    def serialize_obj(self, obj):    # polimorfizm
         dict_ = super().serialize_obj(obj)
         dict_['category'] = obj.category.title
         return dict_
