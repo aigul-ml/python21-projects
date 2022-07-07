@@ -1,4 +1,5 @@
-"================Работа с файлами==================="
+""" WEEK 4/ 12 """
+"================ Работа с файлами ==================="
 # open - функция, которая позволяет открыть файл
 "=========Режимы=========="
 # r  - read (только для чтения)
@@ -145,11 +146,11 @@ print(file.closed) # True
 # with open('write_file.txt', 'a') as file:
 #     file.write('Hello world')
 
-# w+ - открывает файл как для чтения, так и для записи, создает несуществуюший файл
-# r+ - открывает файл, если его нет, вызывает ошибку
-# a+ - открывает файл для записи в конец, при отсутствии файла создает его
+# w+ --> read + write - открывает файл как для чтения, так и для записи, создает несуществуюший файл
+# r+ --> read + write - открывает файл, если его нет, вызывает ошибку
+# a+ --> append + read - открывает файл для записи в конец, при отсутствии файла создает его
 # with open('non-exist-file.txt', 'w+'): pass
-
+# x --> open non-existing file and writes our input
 
 "========= Пакеты, Модули ========="
 # import file_package
@@ -164,3 +165,24 @@ print(file.closed) # True
 # print(a + b)
 
 # Папка с пакетами - это модуль
+import math
+"""
+CONTENT FROM PLATFORM
+"""
+
+file1 = open('makers.txt', 'r')
+data = file1.read()
+print(data)
+
+# readline - reads 1 line only 
+# readlines --> reads multiple lines 
+
+file2 = open('bootcamp.txt', 'w')
+print(file2.write('This is Makers Bootcamp\n'))
+strings = ['One\n', 'Two\n', 'Three\n']
+file2.writelines(strings)
+
+# do not forget to close the file
+file2.close()
+print(file2.closed)
+
