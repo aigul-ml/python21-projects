@@ -1,58 +1,70 @@
-# views - functions to cooperate with our serializers
 from abstract.utils import get_obj_or_404
 
-from unicodedata import category
-from .models import Category, Product
+from account.models import User
+from .models import Category, Product, Comment
 from .serializers import ProductSerializer, CategorySerializer
 
-
-def product_list(): 
-    serializer = ProductSerializer()  # создаем объект сериализатора
-    
-    # просим список всех наших продуктов
-    products = serializer.serialize_queryset()    # не передаем ничего - поэтому вернет всё
+def product_list():
+    serializer = ProductSerializer()
+    products = serializer.serialize_queryset()
     return products
 
-def product_create(): 
-    title = input('Enter title of the product: ')
-    price = input('Enter price of product: ')
-    desc = input('Enter description: ')
-    quant = input('Enter quantity: ')
+def product_create():
+    title = input("Введите название: ")
+    price = input("Введите цену: ")
+    desc = input("Введите описание: ")
+    quantity = input("Введите кол-во: ")
 
-    print('Choose category: ')
-    # вызываем нашу категорию и выводим
-
+    print("Выберите категорию:")
     for cat in Category.objects:
         print(cat.title)
-    cat_title = input('""""""""""""""""""""""""\n')
+    cat_title = input("=====================\n")
+    category = get_obj_or_404(Category, "title", cat_title)
 
-    category = get_obj_or_404(Category, 'title', cat_title)
-    Product(title, price, desc, quant, category)
-    return 'Продукт успешно создан'
+    Product(title, price, desc, quantity, category)
+    return "Продукт успешно создан"
 
-
-def product_detail(p_id): 
-    product = get_obj_or_404(Product, 'id', int(p_id))
-    # int(p_id) потому что нам нужны числа
+def product_detail(p_id):
+    product = get_obj_or_404(Product, "id", int(p_id))
     serializer = ProductSerializer()
     return serializer.serialize_obj(product)
 
-def product_delete(p_id): 
-    product = get_obj_or_404(Product, 'id', int(p_id))
+def product_delete(p_id):
+    product = get_obj_or_404(Product, "id", int(p_id))
     Product.objects.remove(product)
-    return 'Продукт успешно удален'
+    return "Продукт успешно удален"
 
 def product_update(p_id):
-    product = get_obj_or_404(Product, 'id', int(p_id))
-    field = input('Enter field for changes: ')
+    product = get_obj_or_404(Product, "id", int(p_id))
+    field = input("Введите поле для изменения: ")
     if field in dir(product):
-        print(f'old value: {getattr(product, field)}')
-        value = input(f'{field} = ')
+        print(f"old value: {getattr(product, field)}")
+        value = input(f"{field} = ")
         setattr(product, field, value)
     else:
-        raise Exception(f'Поля {field} нет в продукте.')
-        
-        
-    return product_detail(p_id) 
+        raise Exception(f"Поля {field} нет в продукте")
+    return product_detail(p_id)
 
-    
+def category_create():
+    title = input("Введите название категории: ")
+    Category(title)
+    return "Категория была успешно создана"
+
+def create_comment():
+    email = input("Введите email: ")
+    user = get_obj_or_404(User, "email", email)
+    print("Выберите продукт:")
+    for p in Product.objects:
+        print(p.title)
+    title = input("=======================\n")
+    product = get_obj_or_404(Product, "title", title)
+    body = input("Введите комментарий: ")
+    Comment(user, product, body)
+    return "Комментарий успешно добавлен"
+
+u = User("admin", "admin", "k")
+u.registration("12345678", "12345678")
+u.login("12345678")
+cat = Category("test")
+p = Product("hello", 345, "vghjk", 2, cat)
+Comment(u, p, "hello world")
