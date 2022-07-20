@@ -1,0 +1,462 @@
+CREATE DATABASE animal;
+
+\c animals 
+
+
+CREATE TABLE animal(
+    id SERIAL PRIMARY KEY,
+    color VARCHAR(30),
+    type VARCHAR(30)
+);
+
+
+CREATE TABLE human(
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(30),
+    animal_id INT,
+    CONSTRAINT fk_human_animal
+    FOREIGN KEY (animal_id) REFERENCES animal(id)
+    # referring to the foreign key of animal to link the id of human with animal_id
+));
+
+# OUTPUT --> CREATE TABLE 
+
+
+select * from animal;
+
+INSERT INTO animals (color, type)
+
+INSERT INTO human (name, animal_id) VALUES ('Anna', 3); 
+
+select * from human 
+
+
+SELECT name, animal.type, animal.color
+
+FROM human
+
+JOIN animal
+
+
+ON human.animal_id = animal_id
+
+
+
+SELECT name, animal.type, animal.color FROM human LEFT JOIN animal ON human.animal_id = animal_id;
+
+
+CREATE TABLE animal(
+id SERIAL PRIMARY KEY,
+color VARCHAR(30),
+type VARCHAR(30));
+
+CREATE TABLE human (
+id SERIAL PRIMARY KEY,
+name VARCHAR(30),
+animal_id INT,
+
+CONSTRAINT fk_human_animal 
+FOREIGN KEY (animal_id) 
+REFERENCES animal(id)) ;
+
+
+
+CREATE TABLE doctor (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(30),
+    experience SMALLINT
+);
+
+
+
+CREATE TABLE patient (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(30)
+);
+
+
+
+CREATE TABLE doctor_patient ( 
+    doctor_id INT,
+    CONSTRAINT fk_doctor
+    FOREIGN KEY (doctor_id)
+    REFERENCES doctors(id),
+
+    patient_id INT,
+    CONSTRAINT fk_patient
+    FOREIGN KEY (patient_id)
+    REFERENCES patients(id)
+);
+
+id | doctor_id | patient_id
+----------------------------
+   |   4       |   3
+
+
+INSERT INTO doctor (name, experience)
+VALUES ('Ted', 20);
+
+INSERT INTO doctor (name, experience)
+VALUES ('Bob', 4);
+
+INSERT INTO doctor (name, experience)
+VALUES ('John', 9);
+
+
+INSERT INTO patient (name)
+VALUES ('Alex');
+
+INSERT INTO patient (name)
+VALUES ('Anna');
+
+INSERT INTO patient (name)
+VALUES ('Jeff');
+
+
+
+INSERT INTO doctor_patient (doctor_id, patient_id)
+VALUES (3, 2);
+
+
+INSERT INTO doctor_patient (doctor_id, patient_id) VALUES (2, 3);
+
+
+SELECT doctors.name as Doctor, patients.name as Patient FROM doctor JOIN doctor_patient ON doctors.id = doctor_patient.doctor_id
+JOIN patients ON patient.id = doctor_patient.patient_id; 
+
+
+SELECT name FROM patinet 
+JOIN (SELECT patient_id, COUNT(patient_id) as cnt 
+FROM doctor_patient
+GROUP BY patient_id)
+as nt 
+ON patients.id = nt.patient_id
+WHERE nt.cnt >= 2;
+
+
+# \q
+выходим из psql - чтобы создать файл базы данных psql
+
+
+pg_dump newaccount > newaccount.psql
+
+pg_dump [databaseName] > [databaseName.psql]
+# команда для создания файла базы данных newaccount.psql
+
+
+
+
+
+
+
+СУБД - Ситема Управления Базой Данных
+Postgresql
+
+Установка
+# Linux
+sudo apt install postgresql
+
+# MacOS
+brew install postgresql
+
+# Проверить правильность установки
+psql --version
+
+Первый вход
+# Linux
+sudo -u postgres psql
+
+# MacOS
+psql postgres
+
+Первоначальная настройка
+# Создаем пользователя
+CREATE USER <имя компьютера> WITH PASSWORD '1';
+# Выдаем пользователю права
+ALTER ROLE <имя компьютера> SUPERUSER CREATEROLE CREATEDB REPLICATION BYPASSRLS;
+# Создаем для пользователя базу данных
+CREATE DATABASE <имя компьютера> WITH OWNER <имя компьютера>;
+
+Получение информации 
+\c - К какой БД мы подключены и под каким пользователем
+\c <Имя БД> - Переключение на указанную БД
+\l - Показать список баз данных
+\du - Показать список пользователей
+\dt - Показать список таблиц в базе данных
+(чтобы вернуть контроль после команд \l, \du и \dt, нужно нажать кнопку 'q')
+\q - Выйти из postgresql
+
+CRUD
+Базы данных
+# Создать базу данных
+CREATE DATABASE <имя БД>;
+
+# Удалить базу данных
+DROP DATABASE <имя БД>;
+
+Таблицы
+# Создание таблицы
+CREATE TABLE <имя таблицы> (
+    <имя поля> <тип данных> <доп. параметры>,
+    <имя второго поля> <тип данных> <доп. параметры>,
+    ...
+);
+
+# Добавление столбца в существующую таблицу
+ALTER TABLE <имя таблицы> ADD COLUMN <название столбца> <настройки столбца>;
+
+# Удаление столбца из существующей таблицы
+ALTER TABLE <имя таблицы> DROP COLUMN <название столбца>;
+
+# Изменение столбца в существующей таблице
+ALTER TABLE <имя таблицы> ALTER COLUMN <новые настройки>;
+
+# Удаление таблицы полностью
+DROP TABLE <имя таблицы>;
+
+# Получение информации
+SELECT <имена нужных нам полей (или *)> FROM <имя таблицы>;
+
+# Запись новых данных
+INSERT INTO <название таблицы>(поля, которые мы хотим записать) VALUES (значения этих полей);
+
+# Изменение существующих данных
+UPDATE <название таблицы> 
+SET <имя поля1> = <новое значение>, <имя поля2> = <новое значение> ... 
+WHERE <условие>;
+
+# Удаление данных
+DELETE FROM <название таблицы> WHERE <условие>;
+
+
+Типы данных
+# str
+VARCHAR(5)
+'a'
+CHAR(5)
+'a     '
+# Неограниченный размер
+TEXT 
+
+# int
+Общая спецификация:
+small: -32768 -- +32767 | 2 байта
+medium: -2147483648 -- +2147483647 | 4 байта
+big: -9223372036854775808 -- +9223372036854775807 | 8 байтов
+
+
+SMALLSERIAL, SERIAL, BIGSERIAL - автоматически увеличивающиеся числа
+
+SMALLINT, INT, BIGINT - простые числа
+
+DECIMAL, NUMERIC, REAL - числа с плавающей точкой
+
+# Special
+PRIMARY KEY - делает указанное поле основным уникальным ключом
+FOREIGN KEY - ссылается на запись в другой таблице по id
+
+Условия
+Условия пишутся в конце с помощью ключевого слова WHERE
+# Арифметические символы
+# Синтаксис схож с питоном
+= - Равно
+!= - Не равно
+> - Больше
+>= - Больше или равно
+... 
+Пример
+SELECT name, age FROM human WHERE age > 18;
+
+# LIKE ILIKE
+LIKE - ищет сходства в строке, чувствителен к регистру
+ILIKE - ищет сходства в строке, НЕчувствителен к регистру
+% - Означает, что на его месте могут быть любые символы
+
+# Получим все имена, начинающиеся на 'T' или на 't'
+SELECT name FROM human WHERE name ILIKE 'T%';
+
+# Получим все имена, заканчивающиеся на 't'
+SELECT name FROM human WHERE name LIKE '%t';
+
+
+
+Cвязи
+Есть 3 вида связей:
+# Один к одному
+Один автор - Одна биография
+Одна страна - Один гимн
+Один человек - Одна жизнь
+
+# Один ко многим
+Один автор - много книг
+Одна семья - много машин
+Один аккаунт - много лайков
+Один пост - много комментариев
+
+# Много ко многим
+Много учителей у студентов, много студентов у учителей
+У жанра много фильмов, у фильма много жанров
+У актера много фильмов, у фильма много актеров
+
+# Сначала создается таблица, у которой нет связей
+
+
+# Синтаксис связи один ко многим
+CREATE TABLE <имя таблицы> (
+    id SERIAL PRIMARY KEY,
+    ...
+    some_id INT,
+
+    CONSTRAINT <название переменной (любое)>
+    FOREIGN KEY (some_id)
+    REFERENCES <таблица, на которую ссылаются>(id)
+);
+
+# Получение данных из таблиц по связям
+SELECT <поле первой таблицы>, <вторая таблица>.<поле>
+FROM  <первая таблица>
+JOIN <вторая таблица>
+ON <по каким полям соединяем> (напр: some_id = some.id)
+# Опционально 
+WHERE <условия>;
+
+# Синтаксис таблицы много ко многим
+
+CREATE TABLE <имя таблицы> (
+    <id ключа первой таблицы> INT,
+    <id ключа второй таблицы> INT,
+    <id ключа третьей таблицы> INT,
+    ...
+
+    CONSTRAINT <любое имя>
+    FOREIGN KEY (<id ключа первой таблицы>) 
+    REFERENCES <первая таблица>(id),
+
+    CONSTRAINT <любое имя2>
+    FOREIGN KEY (<id ключа второй таблицы>) 
+    REFERENCES <вторая таблица>(id),
+    ...
+)
+
+# На настоящем примере
+CREATE TABLE doctor (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(25),
+    experience SMALLINT
+);
+
+CREATE TABLE patient (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(25)
+);
+
+CREATE TABLE doctor_patient (
+    doctor_id INT,
+    patient_id INT,
+
+    CONSTRAINT fk_doctor
+    FOREIGN KEY (doctor_id) 
+    REFERENCES doctor(id),
+
+    CONSTRAINT fk_patient
+    FOREIGN KEY (patient_id) 
+    REFERENCES patient(id)
+);
+
+# Запись данных
+INSERT INTO doctor (name, experience)
+VALUES ('Ted', 20);
+
+INSERT INTO doctor (name, experience)
+VALUES ('Bob', 4);
+
+
+INSERT INTO patient (name)
+VALUES ('Alex');
+
+INSERT INTO patient (name)
+VALUES ('Dave');
+
+
+INSERT INTO doctor_patient 
+    (doctor_id, patient_id)
+VALUES (1, 2);
+
+INSERT INTO doctor_patient 
+    (doctor_id, patient_id)
+VALUES (2, 2);
+
+# Получение данных
+SELECT doctor.name as Doctor, 
+       patient.name as Patient
+FROM doctor
+JOIN doctor_patient as dp ON doctor.id = dp.doctor_id
+JOIN patient ON patient.id = dp.patient_id;
+
+
+
+
+
+####################################################
+July 20, 2022
+
+CREATE TABLE account (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50),
+    password VARCHAR(30) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    secret_word VARCHAR(50) NOT NULL
+);
+
+
+CREATE TABLE category (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE product (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(50) NOT NULL,
+    category_id INT NOT NULL,
+    user_id INT NOT NULL,
+    description TEXT NOT NULL,
+    price INT NOT NULL,
+
+    CONSTRAINT fk_category_product
+    FOREIGN KEY (category_id)
+    REFERENCES category(id),
+
+    CONSTRAINT fk_user_product
+    FOREIGN KEY (user_id)
+    REFERENCES account(id)
+);
+
+CREATE TABLE order_product (
+    id SERIAL PRIMARY KEY,
+    quantity SMALLINT NOT NULL,
+    product_id INT NOT NULL,
+    user_id INT NOT NULL,
+
+    CONSTRAINT fk_order_product
+    FOREIGN KEY (product_id)
+    REFERENCES product(id),
+
+    CONSTRAINT fk_order_user
+    FOREIGN KEY (user_id)
+    REFERENCES account(id)
+);
+
+CREATE TABLE comment (
+    id SERIAL PRIMARY KEY,
+    product_id INT NOT NULL,
+    user_id INT NOT NULL,
+    text TEXT NOT NULL,
+
+    CONSTRAINT fk_comment_product
+    FOREIGN KEY (product_id)
+    REFERENCES product(id),
+
+    CONSTRAINT fk_comment_user
+    FOREIGN KEY (user_id)
+    REFERENCES account(id)
+);
